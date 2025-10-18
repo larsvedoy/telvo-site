@@ -9,16 +9,8 @@
 
   <style>
     /* --- Dropdown (popup under "Moduler") --- */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
-
-    .dropbtn {
-      cursor: pointer;
-      padding: 0;
-    }
-
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { cursor: pointer; padding: 0; }
     .dropdown-content {
       display: none;
       position: absolute;
@@ -27,48 +19,27 @@
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       border-radius: 8px;
       padding: 0.5rem 0;
-      top: 100%;
-      left: 0;
+      top: 100%; left: 0;
       z-index: 1000;
-      opacity: 0;
-      transform: translateY(5px);
+      opacity: 0; transform: translateY(5px);
       transition: opacity 0.2s ease, transform 0.2s ease;
     }
-
     .dropdown-content a {
-      color: #222;
-      padding: 0.6rem 1rem;
-      display: block;
-      text-decoration: none;
+      color: #222; padding: 0.6rem 1rem;
+      display: block; text-decoration: none;
       transition: background 0.2s;
     }
-
-    .dropdown-content a:hover {
-      background: #f5f5f5;
-    }
-
+    .dropdown-content a:hover { background: #f5f5f5; }
     .dropdown:hover .dropdown-content,
     .dropdown.active .dropdown-content {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    /* Enkel støtte for mobil: trykk åpner meny */
-    @media (hover: none) {
-      .dropdown-content {
-        position: static;
-        box-shadow: none;
-        opacity: 1;
-        transform: none;
-      }
+      display: block; opacity: 1; transform: translateY(0);
     }
   </style>
 </head>
 <body>
 
 <!-- PASSORDVEGG -->
-<div id="password-screen" class="password-screen">
+<div id="password-screen" class="password-screen" style="display:none;">
   <div class="password-box">
     <img src="assets/telvo-logo.png" alt="Telvo logo" class="pw-logo">
     <h2>Skriv inn tilgangskode for å åpne Telvo</h2>
@@ -89,15 +60,12 @@
       </a>
       <nav class="nav" id="nav">
         <a href="#om">Om</a>
-
-        <!-- Automatisk dropdown for moduler -->
         <div class="dropdown" id="modulesDropdown">
           <a href="/moduler/" class="dropbtn">Moduler ▾</a>
-          <div class="dropdown-content">
-            <!-- Fylles automatisk av JavaScript -->
+          <div class="dropdown-content" id="modulesList">
+            <a href="/moduler/plan/">Planmodul</a> <!-- fallback hvis fetch feiler -->
           </div>
         </div>
-
         <a href="#hvorfor">Hvorfor Telvo</a>
         <a class="cta" href="#kontakt">Kontakt</a>
       </nav>
@@ -154,33 +122,25 @@
 </div>
 
 <script>
-/* --- Passordbeskyttelse (fikset logikk) --- */
 const correctPassword = "ndr3";
-const passwordProtectionEnabled = false; // slå av/på her
-
+const passwordProtectionEnabled = false;
 const pwScreen = document.getElementById("password-screen");
 const content = document.getElementById("content");
 const input = document.getElementById("password-input");
 const button = document.getElementById("password-button");
 const message = document.getElementById("password-message");
-
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// Hvis passordbeskyttelse er av, vis hovedinnhold umiddelbart
+// Vis rett skjerm ved start
 if (!passwordProtectionEnabled) {
   pwScreen.style.display = "none";
   content.style.display = "block";
 } else {
-  // Ellers aktiver vanlig sjekk
   pwScreen.style.display = "flex";
   content.style.display = "none";
-
   button.addEventListener("click", checkPassword);
-  input.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") checkPassword();
-  });
+  input.addEventListener("keypress", e => { if (e.key === "Enter") checkPassword(); });
 }
-
 function checkPassword() {
   if (input.value === correctPassword) {
     pwScreen.style.display = "none";
@@ -194,56 +154,36 @@ function checkPassword() {
 
 /* --- Dynamisk modul-dropdown --- */
 (async () => {
-  const dropdown = document.querySelector('#modulesDropdown .dropdown-content');
+  const dropdown = document.getElementById('modulesList');
   if (!dropdown) return;
 
-  const owner = 'larsvedoy';
-  const repo = 'telvo-site';
-  const path = 'moduler';
-
   try {
-    const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${path}`);
+    const res = await fetch("https://api.github.com/repos/larsvedoy/telvo-site/contents/moduler");
+    if (!res.ok) throw new Error('GitHub-svar ' + res.status);
     const data = await res.json();
 
-    const folders = data.filter(f => f.type === 'dir');
-    const pages = [];
-
-    for (const folder of folders) {
-      const subRes = await fetch(folder.url);
-      const subData = await subRes.json();
-      if (subData.some(f => f.name === 'index.html')) {
-        pages.push({ name: folder.name, url: `/moduler/${folder.name}/` });
-      }
-    }
-
-    if (pages.length === 0) {
-      const a = document.createElement('a');
-      a.textContent = 'Planmodul';
-      a.href = '/moduler/plan/';
-      dropdown.appendChild(a);
-    } else {
-      pages.forEach(p => {
-        const a = document.createElement('a');
-        const formatted = p.name.charAt(0).toUpperCase() + p.name.slice(1) + 'modul';
-        a.textContent = formatted;
-        a.href = p.url;
+    dropdown.innerHTML = ""; // tøm fallback
+    data.forEach(item => {
+      if (item.type === "dir") {
+        const a = document.createElement("a");
+        const label = item.name.charAt(0).toUpperCase() + item.name.slice(1) + "modul";
+        a.textContent = label;
+        a.href = "/moduler/" + item.name + "/";
         dropdown.appendChild(a);
-      });
-    }
+      }
+    });
   } catch (err) {
-    console.error('Klarte ikke å hente moduler:', err);
+    console.warn("Kunne ikke hente moduler fra GitHub:", err);
+    // behold fallback
   }
 })();
 
 /* --- Mobilvennlig dropdown (trykk for å åpne) --- */
-document.addEventListener('click', e => {
-  const dropdown = document.getElementById('modulesDropdown');
+document.addEventListener("click", e => {
+  const dropdown = document.getElementById("modulesDropdown");
   if (!dropdown) return;
-  if (dropdown.contains(e.target)) {
-    dropdown.classList.toggle('active');
-  } else {
-    dropdown.classList.remove('active');
-  }
+  if (dropdown.contains(e.target)) dropdown.classList.toggle("active");
+  else dropdown.classList.remove("active");
 });
 </script>
 </body>
