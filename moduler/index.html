@@ -10,10 +10,9 @@
     margin: 0;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
     color: #222;
-    background: #ffffff;
+    background: #fff;
   }
 
-  /* --- Toppmeny --- */
   header {
     position: sticky;
     top: 0;
@@ -26,118 +25,54 @@
     padding: 1rem 2rem;
     border-bottom: 1px solid rgba(0,0,0,0.05);
   }
-  header .logo {
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    font-size: 1.2rem;
-    color: #222;
-    text-decoration: none;
-  }
-  nav a {
-    color: #222;
-    text-decoration: none;
-    margin-left: 1.5rem;
-    font-weight: 500;
-    transition: opacity 0.2s;
-  }
-  nav a:hover {
-    opacity: 0.7;
-  }
-  nav .btn {
-    background: #7c1125;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 6px;
-    margin-left: 1.5rem;
-  }
+  header .logo {font-weight:600;letter-spacing:.5px;font-size:1.2rem;color:#222;text-decoration:none;}
+  nav a{color:#222;text-decoration:none;margin-left:1.5rem;font-weight:500;transition:opacity .2s;}
+  nav a:hover{opacity:.7;}
+  nav .btn{background:#7c1125;color:#fff;padding:.5rem 1rem;border-radius:6px;margin-left:1.5rem;}
 
-  /* --- Diagram-container --- */
-  main {
-    height: calc(100vh - 80px);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-  }
-  #stage {
-    flex: 1;
-    overflow: auto;
-    background: #ffffff;
-  }
-  svg {
-    display: block;
-    margin: 0 auto;
-    max-width: 1600px;
-    height: auto;
-  }
+  main{height:calc(100vh - 80px);overflow:hidden;display:flex;flex-direction:column;}
+  #stage{flex:1;overflow:auto;background:#fff;}
+  svg{display:block;margin:0 auto;max-width:1600px;height:auto;}
 
-  /* --- Zoom toolbar (floating) --- */
-  .zoom-toolbar {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    background: rgba(255,255,255,0.9);
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    padding: 0.5rem;
-    z-index: 20;
+  .zoom-toolbar{
+    position:fixed;bottom:1.5rem;right:1.5rem;
+    display:flex;flex-direction:column;gap:.5rem;
+    background:rgba(255,255,255,0.9);
+    border:1px solid rgba(0,0,0,0.1);border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.1);
+    padding:.5rem;z-index:20;
   }
-  .zoom-toolbar button {
-    background: #fff;
-    border: 1px solid rgba(0,0,0,0.1);
-    border-radius: 6px;
-    padding: 0.4rem 0.6rem;
-    cursor: pointer;
-    font-size: 0.9rem;
+  .zoom-toolbar button{
+    background:#fff;border:1px solid rgba(0,0,0,0.1);
+    border-radius:6px;padding:.4rem .6rem;cursor:pointer;font-size:.9rem;
   }
-  .zoom-toolbar button:hover {
-    background: #eee;
-  }
+  .zoom-toolbar button:hover{background:#eee;}
 
-  /* --- Tilbakeknapp --- */
-  footer {
-    text-align: center;
-    padding: 1rem 0;
-  }
-  footer a {
-    text-decoration: none;
-    color: #7c1125;
-    font-weight: 500;
-  }
+  footer{text-align:center;padding:1rem 0;}
+  footer a{text-decoration:none;color:#7c1125;font-weight:500;}
 
-  /* --- Tooltip + klikk --- */
-  .overlay-rect {
-    fill: transparent;
-    pointer-events: all;
-  }
-  .overlay-rect:hover {
-    outline: 1px dashed rgba(124,17,37,0.3);
-  }
+  .overlay-rect{fill:transparent;pointer-events:all;}
+  .overlay-rect:hover{outline:1px dashed rgba(124,17,37,0.3);cursor:pointer;}
 </style>
 </head>
 <body>
 
 <header class="site-header">
-    <div class="container header-inner">
-      <a href="#top" class="brand">
-        <img src="assets/telvo-logo.png" alt="Telvo logo">
-        <span class="brand-name">TELVO</span>
-      </a>
-      <nav class="nav" id="nav">
-        <a href="#om">Om</a>
-        <a href="/moduler/">Moduler</a>
-        <a href="#hvorfor">Hvorfor Telvo</a>
-        <a class="cta" href="#kontakt">Kontakt</a>
-      </nav>
-    </div>
-  </header>
+  <div class="container header-inner">
+    <a href="#top" class="brand">
+      <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;vertical-align:middle;">
+      <span class="brand-name">TELVO</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="/#om">Om</a>
+      <a href="/moduler/">Moduler</a>
+      <a href="/#hvorfor">Hvorfor Telvo</a>
+      <a class="cta" href="/#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
 
-<main>
-  <div id="stage"></div>
-</main>
+<main><div id="stage"></div></main>
 
 <div class="zoom-toolbar">
   <button id="zoomIn">＋</button>
@@ -145,138 +80,74 @@
   <button id="zoomReset">⟳</button>
 </div>
 
-<footer>
-  <a href="/">← Tilbake til forsiden</a>
-</footer>
+<footer><a href="/">← Tilbake til forsiden</a></footer>
 
 <script>
-  const svgUrl = '/assets/Telvo-Page-1.drawio.svg';
-  const EXCLUDED = new Set(["ERP", "Personalsystem"]);
+const svgUrl = '/assets/Telvo-Page-1.drawio.svg';
+const EXCLUDED = new Set(["ERP", "Personalsystem"]);
 
-  async function loadSVG() {
-    const res = await fetch(svgUrl);
-    const svgText = await res.text();
-    const stage = document.getElementById('stage');
-    stage.innerHTML = svgText;
-    const svg = stage.querySelector('svg');
+async function loadSVG(){
+  const res = await fetch(svgUrl);
+  const svgText = await res.text();
+  const stage = document.getElementById('stage');
+  stage.innerHTML = svgText;
+  const svg = stage.querySelector('svg');
+  if(!svg) return;
 
-    const zoomRoot = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    while (svg.firstChild) zoomRoot.appendChild(svg.firstChild);
-    svg.appendChild(zoomRoot);
+  // slå av pointer-events på alt eksisterende i SVG
+  svg.querySelectorAll('*').forEach(el => el.setAttribute('pointer-events','none'));
 
-// Legg til et eget lag øverst for klikk og tooltips
-const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-overlayLayer.setAttribute('id', 'overlayLayer');
-overlayLayer.setAttribute('style', 'pointer-events:all;');
+  // nytt lag for klikk og tooltips
+  const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
+  overlayLayer.setAttribute('id','overlayLayer');
+  overlayLayer.setAttribute('pointer-events','all');
+  svg.appendChild(overlayLayer);
 
-// Slå av pointer-events på alt annet enn overlay-laget
-Array.from(svg.children).forEach(el => {
-  if (el !== zoomRoot) el.setAttribute('pointer-events', 'none');
-});
+  const texts = Array.from(svg.querySelectorAll('text')).filter(t => (t.textContent||'').trim().length>0);
 
-// Legg overlay-laget til på slutten (øverst i rekkefølgen)
-svg.appendChild(overlayLayer);
-
-
-    const texts = Array.from(svg.querySelectorAll('text')).filter(t => (t.textContent || '').trim().length > 0);
-
-    function slugify(txt) {
-      return txt
-        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // kompatibel regex
-        .toLowerCase()
-        .replace(/[^a-z0-9\s-]/g, '')
-        .trim()
-        .replace(/\s+/g, '-');
-    }
-
-    texts.forEach(t => {
-      const label = t.textContent.trim();
-      if (!label) return;
-      let bbox;
-      try { bbox = t.getBBox(); } catch { return; }
-
-      const padX = Math.max(8, bbox.width * 0.15);
-      const padY = Math.max(6, bbox.height * 0.6);
-      const x = bbox.x - padX / 2;
-      const y = bbox.y - padY / 2;
-      const w = bbox.width + padX;
-      const h = bbox.height + padY;
-
-      const clickable = !EXCLUDED.has(label);
-
-      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      g.setAttribute('style', 'pointer-events:all;');
-
-      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      rect.setAttribute('x', x);
-      rect.setAttribute('y', y);
-      rect.setAttribute('width', w);
-      rect.setAttribute('height', h);
-      rect.setAttribute('rx', 8);
-      rect.setAttribute('ry', 8);
-      rect.setAttribute('class', 'overlay-rect');
-
-      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-      title.textContent = (clickable ? "Klikk for mer informasjon om " : "Informasjon om ") + label;
-
-      if (clickable) {
-        const a = document.createElementNS('http://www.w3.org/2000/svg', 'a');
-        a.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/moduler/' + slugify(label));
-        a.setAttribute('target', '_self');
-        a.appendChild(title);
-        a.appendChild(rect);
-        g.appendChild(a);
-      } else {
-        g.appendChild(title);
-        g.appendChild(rect);
-      }
-
-      overlayLayer.appendChild(g);
-    });
-
-    // Zoom-funksjoner
-    function getViewBox() {
-      const vb = svg.getAttribute('viewBox');
-      if (vb) return vb.split(' ').map(parseFloat);
-      const bb = zoomRoot.getBBox();
-      const initial = [bb.x, bb.y, Math.max(800, bb.width), Math.max(600, bb.height)];
-      svg.setAttribute('viewBox', initial.join(' '));
-      return initial;
-    }
-
-    let viewBox = getViewBox();
-    function setViewBox(vb) { viewBox = vb; svg.setAttribute('viewBox', vb.join(' ')); }
-
-    function zoom(factor, cx = null, cy = null) {
-      const [x, y, w, h] = viewBox;
-      const centerX = cx ?? (x + w / 2);
-      const centerY = cy ?? (y + h / 2);
-      const newW = w * factor;
-      const newH = h * factor;
-      const newX = centerX - newW / 2;
-      const newY = centerY - newH / 2;
-      setViewBox([newX, newY, newW, newH]);
-    }
-
-    document.getElementById('zoomIn').addEventListener('click', () => zoom(0.85));
-    document.getElementById('zoomOut').addEventListener('click', () => zoom(1.15));
-    document.getElementById('zoomReset').addEventListener('click', () => {
-      const bb = zoomRoot.getBBox();
-      setViewBox([bb.x, bb.y, Math.max(800, bb.width), Math.max(600, bb.height)]);
-    });
-
-    svg.addEventListener('wheel', e => {
-      e.preventDefault();
-      const scale = e.deltaY < 0 ? 0.9 : 1.1;
-      const pt = svg.createSVGPoint();
-      pt.x = e.clientX; pt.y = e.clientY;
-      const ctm = svg.getScreenCTM().inverse();
-      const p = pt.matrixTransform(ctm);
-      zoom(scale, p.x, p.y);
-    }, { passive: false });
+  function slugify(txt){
+    return txt.normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+      .toLowerCase().replace(/[^a-z0-9\s-]/g,'').trim().replace(/\s+/g,'-');
   }
 
-  loadSVG();
-</script>
-  </body>
-</html>
+  texts.forEach(t=>{
+    const label=t.textContent.trim(); if(!label) return;
+    let bbox; try{bbox=t.getBBox();}catch{return;}
+    const padX=Math.max(8,bbox.width*0.15);
+    const padY=Math.max(6,bbox.height*0.6);
+    const x=bbox.x-padX/2, y=bbox.y-padY/2, w=bbox.width+padX, h=bbox.height+padY;
+    const clickable=!EXCLUDED.has(label);
+
+    const rect=document.createElementNS('http://www.w3.org/2000/svg','rect');
+    rect.setAttribute('x',x);rect.setAttribute('y',y);
+    rect.setAttribute('width',w);rect.setAttribute('height',h);
+    rect.setAttribute('rx',8);rect.setAttribute('ry',8);
+    rect.setAttribute('class','overlay-rect');
+    rect.setAttribute('pointer-events','all');
+
+    const title=document.createElementNS('http://www.w3.org/2000/svg','title');
+    title.textContent=(clickable?"Klikk for mer informasjon om ":"Informasjon om ")+label;
+    rect.appendChild(title);
+
+    if(clickable){
+      rect.addEventListener('click',()=>{window.location.href='/moduler/'+slugify(label);});
+    }
+
+    overlayLayer.appendChild(rect);
+  });
+
+  // zoom
+  let viewBox;
+  function getViewBox(){
+    const vb=svg.getAttribute('viewBox');
+    if(vb) return vb.split(' ').map(parseFloat);
+    const bb=svg.getBBox();
+    const initial=[bb.x,bb.y,Math.max(800,bb.width),Math.max(600,bb.height)];
+    svg.setAttribute('viewBox',initial.join(' '));
+    return initial;
+  }
+  viewBox=getViewBox();
+  function setViewBox(vb){viewBox=vb;svg.setAttribute('viewBox',vb.join(' '));}
+
+  function zoom(factor,cx=null,cy=null){
+    const [x,y,w,h]=vi
