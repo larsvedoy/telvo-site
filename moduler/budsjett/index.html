@@ -7,6 +7,35 @@
   <link rel="stylesheet" href="/styles.css">
   <link rel="icon" href="/assets/telvo-logo.png">
   <meta name="description" content="Telvo BudSys: kommunens budsjettmodul – for helhetlig økonomistyring, tiltak, vedtak og scenarioplanlegging i Power Platform.">
+
+  <style>
+    :root { --accent:#7c1125; }
+    main {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      line-height: 1.6;
+      color: #222;
+    }
+    h1 { font-size: 2rem; margin-bottom: .5rem; }
+    h2 { margin-top: 3rem; font-size: 1.3rem; color: var(--accent); }
+    p { margin-top: 1rem; }
+    ul { margin: 1rem 0 1rem 1.5rem; }
+    li { margin-bottom: .4rem; }
+    .highlight {
+      background: #f9f5f6;
+      border-left: 4px solid var(--accent);
+      padding: .8rem 1rem;
+      border-radius: 4px;
+      font-size: .95rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    footer a { text-decoration: none; color: var(--accent); font-weight: 500; }
+  </style>
 </head>
 <body>
 
@@ -62,7 +91,7 @@
   </ul>
 
   <h2>Visualisering og rapportering</h2>
-  <p>Power BI gir brukerne dashboards med nøkkeltall, kostnadsutvikling, tiltaksgjennomføring og avvik mellom budsjett og regnskap. Scenarioendringer kan vises grafisk og sammenlignes i realtid.</p>
+  <p>Power BI gir brukerne dashboards med nøkkeltall, kostnadsutvikling, tiltaksgjennomføring og avvik mellom budsjett og regnskap. Scenarioendringer kan vises grafisk og sammenlignes i sanntid.</p>
 
   <h2>Sikkerhet og deling</h2>
   <p><strong>Azure AD:</strong> tilgang via kommunens sikkerhetsmodell, med roller for redigering, lesing og godkjenning.</p>
@@ -79,7 +108,7 @@
 </main>
 
 <footer>
-  <a href="/moduler/">← Tilbake til moduler</a>
+  <a href="/moduler/">&larr; Tilbake til moduler</a>
 </footer>
 
 <script>
