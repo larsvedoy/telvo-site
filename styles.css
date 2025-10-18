@@ -18,7 +18,7 @@ a:hover{text-decoration:underline}
 .container{width:min(1120px,92%);margin-inline:auto}
 
 .site-header{
-  position:sticky;top:0;z-index:50;background:#f6ede6;backdrop-filter:saturate(180%) blur(10px);
+  position:sticky;top:0;z-index:50;background:rgba(255,255,255,0.85);backdrop-filter:saturate(180%) blur(10px);
   border-bottom:1px solid #eee;
 }
 .header-inner{display:flex;align-items:center;justify-content:space-between;padding:12px 0}
