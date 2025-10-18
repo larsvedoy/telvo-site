@@ -164,10 +164,19 @@
     while (svg.firstChild) zoomRoot.appendChild(svg.firstChild);
     svg.appendChild(zoomRoot);
 
-    const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    overlayLayer.setAttribute('id', 'overlayLayer');
-    //overlayLayer.setAttribute('style', 'pointer-events:none;');
-    zoomRoot.appendChild(overlayLayer);
+// Legg til et eget lag øverst for klikk og tooltips
+const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+overlayLayer.setAttribute('id', 'overlayLayer');
+overlayLayer.setAttribute('style', 'pointer-events:all;');
+
+// Slå av pointer-events på alt annet enn overlay-laget
+Array.from(svg.children).forEach(el => {
+  if (el !== zoomRoot) el.setAttribute('pointer-events', 'none');
+});
+
+// Legg overlay-laget til på slutten (øverst i rekkefølgen)
+svg.appendChild(overlayLayer);
+
 
     const texts = Array.from(svg.querySelectorAll('text')).filter(t => (t.textContent || '').trim().length > 0);
 
