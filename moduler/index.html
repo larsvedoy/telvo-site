@@ -153,4 +153,114 @@
     const svgText = await res.text();
     const stage = document.getElementById('stage');
     stage.innerHTML = svgText;
-    const
+    const svg = stage.querySelector('svg');
+
+    const zoomRoot = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    while (svg.firstChild) zoomRoot.appendChild(svg.firstChild);
+    svg.appendChild(zoomRoot);
+
+    const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    overlayLayer.setAttribute('id', 'overlayLayer');
+    overlayLayer.setAttribute('style', 'pointer-events:none;');
+    zoomRoot.appendChild(overlayLayer);
+
+    const texts = Array.from(svg.querySelectorAll('text')).filter(t => (t.textContent || '').trim().length > 0);
+
+    function slugify(txt) {
+      return txt
+        .normalize('NFD').replace(/[\u0300-\u036f]/g, '')   // kompatibel regex
+        .toLowerCase()
+        .replace(/[^a-z0-9\s-]/g, '')
+        .trim()
+        .replace(/\s+/g, '-');
+    }
+
+    texts.forEach(t => {
+      const label = t.textContent.trim();
+      if (!label) return;
+      let bbox;
+      try { bbox = t.getBBox(); } catch { return; }
+
+      const padX = Math.max(8, bbox.width * 0.15);
+      const padY = Math.max(6, bbox.height * 0.6);
+      const x = bbox.x - padX / 2;
+      const y = bbox.y - padY / 2;
+      const w = bbox.width + padX;
+      const h = bbox.height + padY;
+
+      const clickable = !EXCLUDED.has(label);
+
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('style', 'pointer-events:all;');
+
+      const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+      rect.setAttribute('x', x);
+      rect.setAttribute('y', y);
+      rect.setAttribute('width', w);
+      rect.setAttribute('height', h);
+      rect.setAttribute('rx', 8);
+      rect.setAttribute('ry', 8);
+      rect.setAttribute('class', 'overlay-rect');
+
+      const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+      title.textContent = (clickable ? "Klikk for mer informasjon om " : "Informasjon om ") + label;
+
+      if (clickable) {
+        const a = document.createElementNS('http://www.w3.org/2000/svg', 'a');
+        a.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '/moduler/' + slugify(label));
+        a.setAttribute('target', '_self');
+        a.appendChild(title);
+        a.appendChild(rect);
+        g.appendChild(a);
+      } else {
+        g.appendChild(title);
+        g.appendChild(rect);
+      }
+
+      overlayLayer.appendChild(g);
+    });
+
+    // Zoom-funksjoner
+    function getViewBox() {
+      const vb = svg.getAttribute('viewBox');
+      if (vb) return vb.split(' ').map(parseFloat);
+      const bb = zoomRoot.getBBox();
+      const initial = [bb.x, bb.y, Math.max(800, bb.width), Math.max(600, bb.height)];
+      svg.setAttribute('viewBox', initial.join(' '));
+      return initial;
+    }
+
+    let viewBox = getViewBox();
+    function setViewBox(vb) { viewBox = vb; svg.setAttribute('viewBox', vb.join(' ')); }
+
+    function zoom(factor, cx = null, cy = null) {
+      const [x, y, w, h] = viewBox;
+      const centerX = cx ?? (x + w / 2);
+      const centerY = cy ?? (y + h / 2);
+      const newW = w * factor;
+      const newH = h * factor;
+      const newX = centerX - newW / 2;
+      const newY = centerY - newH / 2;
+      setViewBox([newX, newY, newW, newH]);
+    }
+
+    document.getElementById('zoomIn').addEventListener('click', () => zoom(0.85));
+    document.getElementById('zoomOut').addEventListener('click', () => zoom(1.15));
+    document.getElementById('zoomReset').addEventListener('click', () => {
+      const bb = zoomRoot.getBBox();
+      setViewBox([bb.x, bb.y, Math.max(800, bb.width), Math.max(600, bb.height)]);
+    });
+
+    svg.addEventListener('wheel', e => {
+      e.preventDefault();
+      const scale = e.deltaY < 0 ? 0.9 : 1.1;
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      const ctm = svg.getScreenCTM().inverse();
+      const p = pt.matrixTransform(ctm);
+      zoom(scale, p.x, p.y);
+    }, { passive: false });
+  }
+
+  loadSVG();
+</script>
