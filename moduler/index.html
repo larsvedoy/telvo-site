@@ -161,7 +161,7 @@
 
     const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     overlayLayer.setAttribute('id', 'overlayLayer');
-    overlayLayer.setAttribute('style', 'pointer-events:none;');
+    //overlayLayer.setAttribute('style', 'pointer-events:none;');
     zoomRoot.appendChild(overlayLayer);
 
     const texts = Array.from(svg.querySelectorAll('text')).filter(t => (t.textContent || '').trim().length > 0);
