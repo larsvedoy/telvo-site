@@ -1,174 +1,213 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="no">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Telvo – Planmodul</title>
-<link rel="stylesheet" href="/styles.css">
-<style>
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-    background: #fff;
-    color: #222;
-    line-height: 1.6;
-  }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Planmodul – Telvo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/assets/telvo-logo.png">
+  <meta name="description" content="Telvo Planmodul: databasert plan- og medvirkningsløsning for kommunen, bygget på Microsoft Power Platform – med samskriving, høring, publisering og oppfølging.">
 
-  header {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background: rgba(255,255,255,0.85);
-    backdrop-filter: blur(6px);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-  }
+  <style>
+    /* --- Dropdown (identisk med forsiden) --- */
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { cursor: pointer; padding: 0; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      min-width: 220px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      top: 100%; left: 0;
+      z-index: 1000;
+      opacity: 0; transform: translateY(5px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .dropdown-content a {
+      color: #222; padding: 0.6rem 1rem;
+      display: block; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .dropdown-content a:hover { background: #f5f5f5; }
+    .dropdown:hover .dropdown-content,
+    .dropdown.active .dropdown-content {
+      display: block; opacity: 1; transform: translateY(0);
+    }
 
-  header .brand-name {
-    font-weight: 600;
-    font-size: 1.2rem;
-    margin-left: 0.5rem;
-  }
+    /* --- Innhold / typografi --- */
+    :root { --accent:#7c1125; }
+    main {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      line-height: 1.6;
+      color: #222;
+    }
+    h1 { font-size: 2rem; margin-bottom: .5rem; }
+    h2 { margin-top: 3rem; font-size: 1.3rem; color: var(--accent); }
+    p { margin-top: 1rem; }
+    ul { margin: 1rem 0 1rem 1.5rem; }
+    li { margin-bottom: .4rem; }
+    .highlight {
+      background: #f9f5f6;
+      border-left: 4px solid var(--accent);
+      padding: .8rem 1rem;
+      border-radius: 4px;
+      font-size: .95rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    footer a { text-decoration: none; color: var(--accent); font-weight: 500; }
 
-  nav a {
-    color: #222;
-    text-decoration: none;
-    margin-left: 1.5rem;
-    font-weight: 500;
-    transition: opacity .2s;
-  }
-  nav a:hover { opacity: .7; }
-  nav .cta {
-    background: #7c1125;
-    color: #fff;
-    padding: .5rem 1rem;
-    border-radius: 6px;
-  }
-
-  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
-  section { margin-bottom: 3rem; }
-  h1, h2, h3 { font-weight: 600; color: #111; }
-  h1 { font-size: 2rem; margin-bottom: 1rem; }
-  h2 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: .5rem; }
-  h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: .3rem; }
-
-  ul { padding-left: 1.2rem; }
-  li { margin-bottom: .5rem; }
-
-  .highlight {
-    background: #f9f9f9;
-    border-left: 4px solid #7c1125;
-    padding: 1rem;
-    margin: 1.5rem 0;
-    border-radius: 6px;
-  }
-
-  footer {
-    text-align: center;
-    padding: 2rem 1rem;
-    border-top: 1px solid rgba(0,0,0,0.05);
-    color: #555;
-  }
-  footer a {
-    color: #7c1125;
-    text-decoration: none;
-    font-weight: 500;
-  }
-</style>
+    /* --- Enkle responsive forbedringer --- */
+    @media (max-width: 960px) {
+      main { padding: 3rem 1.25rem 4rem; }
+    }
+    @media (max-width: 720px) {
+      h1 { font-size: 1.75rem; }
+      h2 { font-size: 1.15rem; }
+      .dropdown-content { min-width: 200px; }
+    }
+    /* Touch-tilpasning for dropdown (tap for å åpne) håndteres i JS nedenfor */
+  </style>
 </head>
 <body>
 
-<header>
-  <div class="brand">
-    <a href="/" style="text-decoration:none; color:#222; display:flex; align-items:center;">
-      <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;">
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="brand">
+      <img src="/assets/telvo-logo.png" alt="Telvo logo">
       <span class="brand-name">TELVO</span>
     </a>
+    <nav class="nav" id="nav">
+      <a href="/#om">Om</a>
+
+      <!-- Dynamisk dropdown for moduler (identisk mekanikk som forsiden) -->
+      <div class="dropdown" id="modulesDropdown">
+        <a href="/moduler/" class="dropbtn">Moduler ▾</a>
+        <div class="dropdown-content" id="modulesList">
+          <span style="display:block;padding:0.6rem 1rem;color:#777;">Laster moduler…</span>
+        </div>
+      </div>
+
+      <a href="/#hvorfor">Hvorfor Telvo</a>
+      <a class="cta" href="/#kontakt">Kontakt</a>
+    </nav>
   </div>
-  <nav>
-    <a href="/#om">Om</a>
-    <a href="/moduler/">Moduler</a>
-    <a href="/#hvorfor">Hvorfor Telvo</a>
-    <a class="cta" href="/#kontakt">Kontakt</a>
-  </nav>
 </header>
 
 <main>
   <h1>Telvo Planmodul</h1>
-  <p><strong>En ny måte å utarbeide og dele kommunale planer på – databasert, integrert og involverende.</strong></p>
-  <p>Telvo Planmodul hjelper kommuner med å utvikle, forvalte og publisere kommuneplaner og temaplaner direkte i Microsoft Teams. 
-  Løsningen bygger på Microsoft Power Platform og gjør planarbeidet databasert – ikke dokumentbasert.</p>
+  <p class="highlight">Databasert plan- og medvirkningsløsning for kommunen – samskriving i Power Apps, høringer med innspill, publisering som nettportal og oppfølging med indikatorer og tiltak.</p>
 
-  <section>
-    <h2>Arkitektur og hovedidé</h2>
-    <p><strong>Bygget på Microsoft Power Platform</strong></p>
-    <ul>
-      <li><strong>Power Apps (i Teams):</strong> planverktøyet der ansatte skriver og samarbeider direkte i Teams.</li>
-      <li><strong>Dataverse:</strong> lagrer planinnhold som strukturerte data med koblinger mellom mål, strategier og tiltak.</li>
-      <li><strong>Power Pages:</strong> publiserer planene som universelt utformede nettrapporter for innbyggerne.</li>
-      <li><strong>Power Automate:</strong> håndterer arbeidsflyt og varslinger under planprosessen.</li>
-      <li><strong>Integrasjoner:</strong> åpne koblinger til GIS/planregister, økonomisystem, Power BI og Outlook-kalender.</li>
-    </ul>
-    <div class="highlight">
-      100 % skybasert (Microsoft 365 / Azure AD)  •  Universell utforming (WCAG 2.1)  •  Personvern og sikkerhet by design
-    </div>
-  </section>
+  <h2>Formål og bakgrunn</h2>
+  <p>Telvo Planmodul gjør planarbeidet i kommunen datadrevet i stedet for dokumentdrevet. Innhold lagres som strukturerte data (mål, strategier, tiltak, kapitler, indikatorer), som kan gjenbrukes, kobles til budsjett og publiseres på nett. Slik får dere bedre samhandling, ryddigere begrepsbruk og raskere publisering – uten tunge Word/PDF-runder.</p>
+  <p>Modulen er bygget for kommuneplaner og temaplaner, men kan også brukes for strategier og handlingsplaner i virksomhetsområder. Målet er en moderne planplattform der innbyggere, politikere og ansatte enkelt kan lese, bidra og følge opp.</p>
 
-  <section>
-    <h2>Roller og medvirkning</h2>
-    <p><strong>Planlegging som involverer alle</strong></p>
-    <ul>
-      <li><strong>Planleggere og ansatte:</strong> samskriving, maler og struktur, versjonshistorikk og “rød tråd” til økonomiplan.</li>
-      <li><strong>Politikere:</strong> tilgang til planutkast via Teams eller portal – kommentér direkte i løsningen.</li>
-      <li><strong>Innbyggere:</strong> les planer på nett, gi innspill via skjema og følg høringsprosessen.</li>
-      <li><strong>Fagforeninger:</strong> intern høring med strukturert oppfølging og status på innspill.</li>
-      <li><strong>Ledere:</strong> dashboards med status for alle planprosesser.</li>
-    </ul>
-  </section>
+  <h2>Arkitektur og teknologi</h2>
+  <p><strong>Power Apps (Teams-integrert):</strong> hovedappen for skriving, strukturer og prosess. Modell-drevet UI for stabilitet og gode lister/relasjoner.</p>
+  <p><strong>Dataverse:</strong> databasen for planinnhold (Plan, Kapittel, Mål, Strategi, Tiltak, Indikator, Innspill, Versjon m.m.) med relasjoner og rollebasert sikkerhet.</p>
+  <p><strong>Power Pages:</strong> planportal for ekstern publisering av utkast og vedtatte planer – universelt utformet og mobilvennlig.</p>
+  <p><strong>Power Automate:</strong> arbeidsflyt for høringer, varsler, versjonsmerking, publisering og oppgaveflyt.</p>
+  <p><strong>Power BI:</strong> dashboards for status og utvikling (indikatorer, framdrift, antall innspill, prosessstatus).</p>
+  <p><strong>SharePoint:</strong> dokumentbibliotek for vedlegg (utredninger, bilder, notat), koblet til planobjekter.</p>
 
-  <section>
-    <h2>Nøkkelfunksjoner</h2>
-    <ul>
-      <li><strong>Samskriving og versjonering:</strong> jobbe sammen i sanntid med maler og definisjoner.</li>
-      <li><strong>Medvirkning og høringer:</strong> digitale skjemaer, statusvisning og åpen deling av innspill.</li>
-      <li><strong>Publisering og tilgjengelighet:</strong> nettrapporter, universell utforming og Power BI-grafer.</li>
-      <li><strong>Oppfølging og styring:</strong> kobling til økonomiplan, indikatorer og handlingsplaner.</li>
-    </ul>
-  </section>
+  <h2>Brukerroller og medvirkning</h2>
+  <ul>
+    <li><strong>Planleggere/administrasjon:</strong> samskriver planinnhold i appen, gjenbruker maler og struktur, knytter tiltak til mål og indikatorer.</li>
+    <li><strong>Politikere:</strong> leser utkast (enkelt grensesnitt), kommenterer i frister og følger høringsversjoner via portalen.</li>
+    <li><strong>Innbyggere:</strong> leser publiserte planer og sender inn strukturerte innspill i høringer (med enkel moderering).</li>
+    <li><strong>Arbeidstakerorganisasjoner:</strong> får dedikert innspillsløp ved behov (intern høring), status og tilbakemeldinger.</li>
+    <li><strong>Ledelse:</strong> følger porteføljeoversikt: prosessfaser, frister, antall innspill, tiltaksgjennomføring.</li>
+  </ul>
 
-  <section>
-    <h2>Integrasjon i arbeidshverdagen</h2>
-    <ul>
-      <li>Tilgang rett i Teams med @-varsler, chat og SharePoint-vedlegg.</li>
-      <li>Automatiske varsler i Teams og e-post ved frister og hendelser.</li>
-      <li>Eksport til Word, PowerPoint og PDF – alt fra samme datakilde.</li>
-    </ul>
-  </section>
+  <h2>Prosess og arbeidsflyt</h2>
+  <p>Planmodulen støtter hele livssyklusen – fra idé til vedtak og oppfølging:</p>
+  <ul>
+    <li><strong>Oppstart og struktur:</strong> velg mal (samfunnsdel/temaplan), opprett planobjekt med meta (formål, tidsramme, ansvar), og generer kapittelinndeling.</li>
+    <li><strong>Samskriving:</strong> flere kan redigere ulike deler samtidig. Begreper standardiseres via felt og malterminologi. Versjonshistorikk lagres.</li>
+    <li><strong>Medvirkning/høring:</strong> sett planen i høringsmodus, publiser utkast til Power Pages, samle innspill via skjema (knyttes til kapittel/tema), moderer og merk status (“vurdert”, “innarbeidet”, “avvist – begrunnelse”).</li>
+    <li><strong>Politisk behandling:</strong> del konsis leservisning med beslutningsgrunnlag (mål, konsekvenser, kost/nytte). Varsler om frister i Teams/e-post.</li>
+    <li><strong>Vedtak og publisering:</strong> frys versjon, publiser vedtatt plan som nettrapport med søk, kapittelnavigasjon og eventuelle grafer.</li>
+    <li><strong>Oppfølging:</strong> koble tiltak til indikatorer og (valgfr.) budsjettposter; følg framdrift i dashboard; generer årsrapporter.</li>
+  </ul>
 
-  <section>
-    <h2>Konkurransefortrinn</h2>
-    <ul>
-      <li>Sømløs Microsoft-integrasjon og enkel utrulling.</li>
-      <li>Enklere å tilpasse og vedlikeholde gjennom low-code-plattform.</li>
-      <li>Medvirkning integrert i hele planprosessen.</li>
-      <li>Oppfølging og rapportering i samme løsning.</li>
-      <li>Kostnadseffektiv utnyttelse av eksisterende Microsoft-lisenser.</li>
-    </ul>
-  </section>
+  <h2>Nøkkelfunksjoner</h2>
+  <ul>
+    <li><strong>Strukturert planinnhold:</strong> datafelter for mål/strategi/tiltak/indikator – ikke fritekst i dokumenter.</li>
+    <li><strong>Maler og standardbegreper:</strong> konsistent terminologi og kapitler på tvers av plantyper og sektorer.</li>
+    <li><strong>Relasjoner og “rød tråd”:</strong> tiltak → mål → indikatorer; lenk videre til budsjett og virksomhetsplaner.</li>
+    <li><strong>Versjoner og endringslogg:</strong> utkast, høringsversjon, vedtatt; automatisk diff/logg mellom versjoner.</li>
+    <li><strong>Høring og innspill:</strong> strukturert skjema, statusflyt, moderering og offentlig/innlogget høringsløp ved behov.</li>
+    <li><strong>Publisering på nett:</strong> Power Pages-portal med UU, søk, kapittelnavigasjon og ev. indikator-grafer.</li>
+    <li><strong>Dashboards:</strong> portefølje og per plan (framdrift, innspill, indikatorer, frister, ansvarlige).</li>
+    <li><strong>Eksport:</strong> generer PDF/Word ved behov, med maler som sy sammen databasen til rapportformat.</li>
+  </ul>
 
-  <section>
-    <h2>Vil du vite mer?</h2>
-    <p>Ønsker du å se hvordan Telvo Plan kan tilpasses din kommune? 
-      <a href="/#kontakt">Kontakt oss</a> for en demonstrasjon eller samtale.</p>
-  </section>
+  <h2>Sikkerhet, deling og publisering</h2>
+  <p><strong>Tilgang:</strong> Azure AD-innlogging og Dataverse-roller (f.eks. planforfatter, intern leser, moderator). Utkast kan skjermes internt; publisering styres per plan/fase.</p>
+  <p><strong>Logging og sporbarhet:</strong> endringer, kommentarer og innspill logges. Modereringsstatus er etterprøvbar.</p>
+  <p><strong>Personvern:</strong> innspill kan anonymiseres i publisering. Portalen kan åpnes uten innlogging eller beskyttes (ID-porten/Azure AD B2C) ved behov.</p>
+  <p><strong>Universell utforming:</strong> portalen følger WCAG-prinsipper og fungerer på mobil, nettbrett og desktop.</p>
+
+  <h2>Konkurransefortrinn og videreutvikling</h2>
+  <ul>
+    <li><strong>Dyp M365-integrasjon:</strong> Teams-app, felles innlogging, SharePoint-vedlegg, Power BI-innsikt.</li>
+    <li><strong>Medvirkning som standard:</strong> høringer og innspill innebygd i samme løsning som skriving og publisering.</li>
+    <li><strong>Helhetlig styring:</strong> koblinger til budsjett/økonomi og virksomhetsplaner gir rød tråd fra mål til gjennomføring.</li>
+    <li><strong>Lavkode og skalerbar:</strong> maler og tabeller kan tilpasses lokalt; kommunen eier data og kan bygge videre.</li>
+    <li><strong>Sanntidsoppdatering:</strong> publisert innhold henter direkte fra databasen – unngå manuelle eksportløp.</li>
+  </ul>
+  <p>Videreutvikling kan inkludere automatisk generering av presentasjoner for folkemøter, AI-assistert forenkling av språk, eller tettere kobling mot GIS og planregister for arealplaner.</p>
 </main>
 
 <footer>
-  <a href="/moduler/">← Tilbake til moduloversikten</a>
+  <a href="/moduler/">← Tilbake til moduler</a>
 </footer>
 
+<script>
+/* --- Dynamisk modul-dropdown (samme som forsiden) --- */
+(async () => {
+  const dropdown = document.getElementById('modulesList');
+  if (!dropdown) return;
+
+  try {
+    const res = await fetch("https://api.github.com/repos/larsvedoy/telvo-site/contents/moduler");
+    if (!res.ok) throw new Error('GitHub-svar ' + res.status);
+    const data = await res.json();
+
+    dropdown.innerHTML = "";
+    data.forEach(item => {
+      if (item.type === "dir") {
+        const a = document.createElement("a");
+        const cleanName = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+        a.textContent = cleanName;
+        a.href = "/moduler/" + item.name + "/";
+        dropdown.appendChild(a);
+      }
+    });
+
+    if (!dropdown.innerHTML.trim()) {
+      dropdown.innerHTML = '<span style="display:block;padding:0.6rem 1rem;color:#777;">Ingen moduler funnet</span>';
+    }
+  } catch (err) {
+    console.warn("Kunne ikke hente moduler fra GitHub:", err);
+    dropdown.innerHTML = '<a href="/moduler/systemadmin/">SystemAdmin</a>';
+  }
+})();
+
+/* --- Mobilvennlig dropdown (klikk for å toggle, som forsiden) --- */
+document.addEventListener("click", e => {
+  const dropdownWrap = document.getElementById("modulesDropdown");
+  if (!dropdownWrap) return;
+  if (dropdownWrap.contains(e.target)) dropdownWrap.classList.toggle("active");
+  else dropdownWrap.classList.remove("active");
+});
+</script>
 </body>
 </html>
