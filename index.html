@@ -89,6 +89,7 @@
 
 <script>
   const correctPassword = "ndr3";
+  const passwordProtectionEnabled = false; // sett til true/false for å slå av/på passord
   const input = document.getElementById("password-input");
   const button = document.getElementById("password-button");
   const message = document.getElementById("password-message");
@@ -100,17 +101,17 @@
     if (e.key === "Enter") checkPassword();
   });
 
-  function checkPassword() {
-    if (input.value === correctPassword) {
-      pwScreen.style.display = "none";
-      content.style.display = "block";
-      document.getElementById('year').textContent = new Date().getFullYear();
-    } else {
-      message.textContent = "Feil tilgangskode.";
-      input.value = "";
-      input.focus();
-    }
+function checkPassword() {
+  if (!passwordProtectionEnabled || input.value === correctPassword) {
+    pwScreen.style.display = "none";
+    content.style.display = "block";
+    document.getElementById('year').textContent = new Date().getFullYear();
+  } else {
+    message.textContent = "Feil tilgangskode.";
+    input.value = "";
+    input.focus();
   }
+}
 </script>
 </body>
 </html>
