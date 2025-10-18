@@ -6,21 +6,6 @@
   <title>Telvo – Datadrevet plan- og styringsverktøy for kommuner</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="icon" href="assets/telvo-logo.png">
-</head>
-<body>
-
-<!-- PASSORDVEGG -->
-<div id="password-screen" class="password-screen">
-  <div class="password-box">
-    <img src="assets/telvo-logo.png" alt="Telvo logo" class="pw-logo">
-    <h2>Skriv inn tilgangskode for å åpne Telvo</h2><!doctype html>
-<html lang="no">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Telvo – Datadrevet plan- og styringsverktøy for kommuner</title>
-  <link rel="stylesheet" href="styles.css">
-  <link rel="icon" href="assets/telvo-logo.png">
 
   <style>
     /* --- Dropdown (popup under "Moduler") --- */
@@ -260,117 +245,6 @@ document.addEventListener('click', e => {
     dropdown.classList.remove('active');
   }
 });
-</script>
-</body>
-</html>
-
-    <input type="password" id="password-input" placeholder="Tilgangskode">
-    <button id="password-button">OK</button>
-    <p id="password-message" class="message"></p>
-    <p class="hint">For samarbeidspartnere – kontakt <a href="mailto:lars@telvo.no">lars@telvo.no</a> for tilgang.</p>
-  </div>
-</div>
-
-<!-- HOVEDINNHOLD (skjules til riktig kode) -->
-<div id="content" style="display:none;">
-  <header class="site-header">
-    <div class="container header-inner">
-      <a href="#top" class="brand">
-        <img src="assets/telvo-logo.png" alt="Telvo logo">
-        <span class="brand-name">TELVO</span>
-      </a>
-      <nav class="nav" id="nav">
-        <a href="#om">Om</a>
-       <div class="dropdown">
-  <a href="/moduler/" class="dropbtn">Moduler ▾</a>
-  <div class="dropdown-content">
-    <a href="/moduler/plan/">Planmodul</a>
-    <a href="/moduler/budsjett/">Budsjett & scenarier</a>
-    <a href="/moduler/passiva/">Passiva / lån</a>
-    <a href="/moduler/selvkost/">Selvkost & delegasjoner</a>
-  </div>
-</div>
-
-        <a href="#hvorfor">Hvorfor Telvo</a>
-        <a class="cta" href="#kontakt">Kontakt</a>
-      </nav>
-    </div>
-  </header>
-
-  <main id="top">
-    <section class="hero">
-      <div class="container hero-inner">
-        <h1>Datadrevet plan- og styringsverktøy for kommuner</h1>
-        <p class="lead">Bygget på Microsoft Power Platform. Integrert i Teams. Utviklet for og med kommunesektoren.</p>
-      </div>
-    </section>
-
-    <section id="om" class="section">
-      <div class="container">
-        <h2>Hva er Telvo?</h2>
-        <p>Plassholdertekst: Telvo er en moderne, databasert plattform som gjør plan- og økonomiarbeid mer effektivt, mer transparent og enklere å samhandle om.</p>
-      </div>
-    </section>
-
-    <section id="moduler" class="section alt">
-      <div class="container">
-        <h2>Kjerne-moduler</h2>
-        <div class="cards">
-          <article class="card"><h3>Planmodul</h3><p>Plassholdertekst.</p></article>
-          <article class="card"><h3>Budsjett & scenarier</h3><p>Plassholdertekst.</p></article>
-          <article class="card"><h3>Passiva / lån</h3><p>Plassholdertekst.</p></article>
-          <article class="card"><h3>Selvkost & delegasjoner</h3><p>Plassholdertekst.</p></article>
-        </div>
-      </div>
-    </section>
-
-    <section id="hvorfor" class="section">
-      <div class="container">
-        <h2>Hvorfor Telvo?</h2>
-        <ul class="bullets">
-          <li>Datadrevet – ikke dokumentdrevet.</li>
-          <li>Eierskap til egne data.</li>
-          <li>Sømløst i Microsoft Teams og Power Platform.</li>
-          <li>Bygget i samarbeid med kommunesektoren.</li>
-        </ul>
-      </div>
-    </section>
-
-    <section id="kontakt" class="section alt">
-      <div class="container contact">
-        <h2>Kontakt</h2>
-        <p>Interessert i samarbeid eller demo? Ta kontakt på telefon <a href="tel:+4799703399">+47 997 03 399</a>.</p>
-        <p class="smallprint">© <span id="year"></span> Telvo. Alle rettigheter reservert.</p>
-      </div>
-    </section>
-  </main>
-</div>
-
-<script>
-  const correctPassword = "ndr3";
-  const passwordProtectionEnabled = false; // sett til true/false for å slå av/på passord
-  const input = document.getElementById("password-input");
-  const button = document.getElementById("password-button");
-  const message = document.getElementById("password-message");
-  const pwScreen = document.getElementById("password-screen");
-  const content = document.getElementById("content");
-
-  button.addEventListener("click", checkPassword);
-  input.addEventListener("keypress", function(e) {
-    if (e.key === "Enter") checkPassword();
-  });
-
-function checkPassword() {
-  if (!passwordProtectionEnabled || input.value === correctPassword) {
-    pwScreen.style.display = "none";
-    content.style.display = "block";
-    document.getElementById('year').textContent = new Date().getFullYear();
-  } else {
-    message.textContent = "Feil tilgangskode.";
-    input.value = "";
-    input.focus();
-  }
-}
 </script>
 </body>
 </html>
