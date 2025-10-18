@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="no">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>BudSys – Telvo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/assets/telvo-logo.png">
+  <meta name="description" content="Telvo BudSys: kommunens budsjettmodul – for helhetlig økonomistyring, tiltak, vedtak og scenarioplanlegging i Power Platform.">
+</head>
+<body>
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a href="/" class="brand">
+      <img src="/assets/telvo-logo.png" alt="Telvo logo">
+      <span class="brand-name">TELVO</span>
+    </a>
+    <nav class="nav" id="nav">
+      <a href="/#om">Om</a>
+      <div class="dropdown" id="modulesDropdown">
+        <a href="/moduler/" class="dropbtn">Moduler ▾</a>
+        <div class="dropdown-content" id="modulesList">
+          <span style="display:block;padding:0.6rem 1rem;color:#777;">Laster moduler…</span>
+        </div>
+      </div>
+      <a href="/#hvorfor">Hvorfor Telvo</a>
+      <a class="cta" href="/#kontakt">Kontakt</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <h1>Telvo BudSys</h1>
+  <p class="highlight">Kommunens budsjettmodul – for innsending, behandling og oppfølging av budsjettforslag og tiltak, med visualisering, flerårsscenarier og kobling mot planer og vedtak.</p>
+
+  <h2>Formål og bakgrunn</h2>
+  <p>Telvo BudSys gir kommunen et strukturert og integrert verktøy for budsjettprosessen. I stedet for manuelle Excel-løsninger samles alle forslag, tiltak og økonomidata i én løsning – tilgjengelig for saksbehandlere, ledere og økonomiavdelingen. Data gjenbrukes og kobles til både plan- og systeminformasjon.</p>
+
+  <h2>Arkitektur og teknologi</h2>
+  <p><strong>Power Apps (modelldrevet):</strong> applikasjon med skjema og visninger for budsjettering, tiltak og oppfølging.</p>
+  <p><strong>Dataverse:</strong> tabeller for budsjettforslag, tiltak, vedtak, enheter, kontoplan og scenarioer – med relasjoner og sikkerhetsnivåer.</p>
+  <p><strong>Power Automate:</strong> arbeidsflyt for godkjenning, varsler og påminnelser, samt eksport og simulering.</p>
+  <p><strong>Power BI:</strong> visualisering av nøkkeltall, tiltaksgjennomføring, scenariovariasjoner og økonomisk status.</p>
+  <p><strong>SharePoint/Teams:</strong> vedlegg og samarbeid (notater, tiltaksgrunnlag, kommentarer).</p>
+
+  <h2>Hovedfunksjoner</h2>
+  <ul>
+    <li><strong>Budsjettforslag:</strong> innsending og godkjenning av forslag med tiltak, ansvar, beløp og år.</li>
+    <li><strong>Integrasjon med plan og systemdata:</strong> koblinger til mål og systemkostnader.</li>
+    <li><strong>Flerårsbudsjettering:</strong> planlegging av tiltak over 3–4 år og prioritering i økonomiplan.</li>
+    <li><strong>Vedtak og status:</strong> oversikt over behandling og gjennomføring av budsjettvedtak.</li>
+    <li><strong>Dynamisk kontering:</strong> struktur for kostnadssteder og ansvarsområder kan endres løpende.</li>
+  </ul>
+
+  <h2>Roller og tilgang</h2>
+  <ul>
+    <li><strong>Budsjettansvarlige:</strong> sender inn og følger opp forslag innen egne enheter.</li>
+    <li><strong>Saksbehandlere:</strong> kvalitetssikrer, samordner og konterer forslag før behandling.</li>
+    <li><strong>Virksomhetsledere:</strong> får oversikt over egne budsjettposter og tiltak.</li>
+    <li><strong>Økonomiavdelingen:</strong> konsoliderer og analyserer budsjettet, kjører scenarioer og følger opp status.</li>
+  </ul>
+
+  <h2>Visualisering og rapportering</h2>
+  <p>Power BI gir brukerne dashboards med nøkkeltall, kostnadsutvikling, tiltaksgjennomføring og avvik mellom budsjett og regnskap. Scenarioendringer kan vises grafisk og sammenlignes i realtid.</p>
+
+  <h2>Sikkerhet og deling</h2>
+  <p><strong>Azure AD:</strong> tilgang via kommunens sikkerhetsmodell, med roller for redigering, lesing og godkjenning.</p>
+  <p><strong>Audit trail:</strong> all endring og vedtakshistorikk logges med dato og bruker.</p>
+  <p><strong>Sensitiv informasjon:</strong> felt kan skjermes og merkes for begrenset tilgang.</p>
+
+  <h2>Fordeler og gevinst</h2>
+  <ul>
+    <li><strong>Datagjenbruk:</strong> tiltak, kostnader og mål kobles på tvers av plan og økonomi.</li>
+    <li><strong>Effektiv behandling:</strong> digital innsending og godkjenning med automatiske varsler.</li>
+    <li><strong>Sanntidsrapportering:</strong> endringer i forslag og vedtak gjenspeiles umiddelbart i dashboard.</li>
+    <li><strong>Helhetlig styring:</strong> bedre oversikt over tiltak og økonomi gir bedre prioritering og gevinstrealisering.</li>
+  </ul>
+</main>
+
+<footer>
+  <a href="/moduler/">← Tilbake til moduler</a>
+</footer>
+
+<script>
+(async () => {
+  const dropdown = document.getElementById('modulesList');
+  if (!dropdown) return;
+  try {
+    const res = await fetch("https://api.github.com/repos/larsvedoy/telvo-site/contents/moduler");
+    if (!res.ok) throw new Error('GitHub-svar ' + res.status);
+    const data = await res.json();
+    dropdown.innerHTML = "";
+    data.forEach(item => {
+      if (item.type === "dir") {
+        const a = document.createElement("a");
+        const cleanName = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+        a.textContent = cleanName;
+        a.href = "/moduler/" + item.name + "/";
+        dropdown.appendChild(a);
+      }
+    });
+    if (!dropdown.innerHTML.trim()) {
+      dropdown.innerHTML = '<span style="display:block;padding:0.6rem 1rem;color:#777;">Ingen moduler funnet</span>';
+    }
+  } catch (err) {
+    console.warn("Kunne ikke hente moduler fra GitHub:", err);
+    dropdown.innerHTML = '<a href="/moduler/systemadmin/">SystemAdmin</a>';
+  }
+})();
+
+document.addEventListener("click", e => {
+  const dropdownWrap = document.getElementById("modulesDropdown");
+  if (!dropdownWrap) return;
+  if (dropdownWrap.contains(e.target)) dropdownWrap.classList.toggle("active");
+  else dropdownWrap.classList.remove("active");
+});
+</script>
+</body>
+</html>
