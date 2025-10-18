@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Moduler – Telvo</title>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    color: #222;
+    background: #f7f7f7;
+  }
+
+  /* --- Toppmeny --- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+  header .logo {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 1.2rem;
+    color: #222;
+    text-decoration: none;
+  }
+  nav a {
+    color: #222;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  nav a:hover {
+    opacity: 0.7;
+  }
+  nav .btn {
+    background: #7c1125;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    margin-left: 1.5rem;
+  }
+
+  /* --- Diagram-container --- */
+  main {
+    height: calc(100vh - 80px);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  #stage {
+    flex: 1;
+    overflow: auto;
+    background: #f7f7f7;
+  }
+  svg {
+    display: block;
+    margin: 0 auto;
+    max-width: 1600px;
+    height: auto;
+  }
+
+  /* --- Zoom toolbar (floating) --- */
+  .zoom-toolbar {
+    position: fixed;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(255,255,255,0.9);
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    padding: 0.5rem;
+    z-index: 20;
+  }
+  .zoom-toolbar button {
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .zoom-toolbar button:hover {
+    background: #eee;
+  }
+
+  /* --- Tilbakeknapp --- */
+  footer {
+    text-align: center;
+    padding: 1rem 0;
+  }
+  footer a {
+    text-decoration: none;
+    color: #7c1125;
+    font-weight: 500;
+  }
+
+  /* --- Tooltip + klikk --- */
+  .overlay-rect {
+    fill: transparent;
+    pointer-events: all;
+  }
+  .overlay-rect:hover {
+    outline: 1px dashed rgba(124,17,37,0.3);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">TELVO</a>
+  <nav>
+    <a href="/om.html">Om</a>
+    <a href="/moduler/" class="active">Moduler</a>
+    <a href="/hvorfor.html">Hvorfor Telvo</a>
+    <a href="/kontakt.html" class="btn">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+  <div id="stage"></div>
+</main>
+
+<div class="zoom-toolbar">
+  <button id="zoomIn">＋</button>
+  <button id="zoomOut">－</button>
+  <button id="zoomReset">⟳</button>
+</div>
+
+<footer>
+  <a href="/">← Tilbake til forsiden</a>
+</footer>
+
+<script>
+  const svgUrl = '/assets/Telvo-Page-1.drawio.svg';
+  const EXCLUDED = new Set(["ERP", "Personalsystem"]);
+
+  async function loadSVG() {
+    const res = await fetch(svgUrl);
+    const svgText = await res.text();
+    const stage = document.getElementById('stage');
+    stage.innerHTML = svgText;
+    const
