@@ -1,140 +1,81 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="no">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>SystemAdmin – Telvo</title>
-<meta name="description" content="SystemAdmin gir deg full oversikt over kommunens digitale løsninger – systemer, integrasjoner, eierskap, lisenser og avtaler – med støtte for sikkerhet, personvern og beredskap.">
-<link rel="stylesheet" href="/styles.css">
-<style>
-  body {
-    margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
-    color: #222;
-    background: #fff;
-    line-height: 1.6;
-  }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SystemAdmin – Telvo</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="icon" href="/assets/telvo-logo.png">
+  <meta name="description" content="SystemAdmin gir full oversikt over kommunens digitale løsninger – systemer, integrasjoner, eierskap, lisenser og avtaler – med støtte for sikkerhet, personvern og beredskap.">
 
-  /* --- Header (identisk med forsiden) --- */
-  header.site-header {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(255,255,255,0.95);
-    backdrop-filter: blur(6px);
-    border-bottom: 1px solid rgba(0,0,0,0.05);
-  }
-  .header-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-  }
-  .brand {
-    display: flex;
-    align-items: center;
-    gap: .5rem;
-    text-decoration: none;
-    color: #222;
-    font-weight: 600;
-    font-size: 1.2rem;
-  }
-  .brand-name { letter-spacing: .5px; }
+  <style>
+    /* --- Dropdown (samme som forsiden) --- */
+    .dropdown { position: relative; display: inline-block; }
+    .dropbtn { cursor: pointer; padding: 0; }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #fff;
+      min-width: 220px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      border-radius: 8px;
+      padding: 0.5rem 0;
+      top: 100%; left: 0;
+      z-index: 1000;
+      opacity: 0; transform: translateY(5px);
+      transition: opacity 0.2s ease, transform 0.2s ease;
+    }
+    .dropdown-content a {
+      color: #222; padding: 0.6rem 1rem;
+      display: block; text-decoration: none;
+      transition: background 0.2s;
+    }
+    .dropdown-content a:hover { background: #f5f5f5; }
+    .dropdown:hover .dropdown-content,
+    .dropdown.active .dropdown-content {
+      display: block; opacity: 1; transform: translateY(0);
+    }
 
-  .nav a {
-    color: #222;
-    text-decoration: none;
-    margin-left: 1.5rem;
-    font-weight: 500;
-    transition: opacity .2s;
-  }
-  .nav a:hover { opacity: .7; }
-  .nav .btn {
-    background: #7c1125;
-    color: #fff;
-    padding: .5rem 1rem;
-    border-radius: 6px;
-    margin-left: 1.5rem;
-  }
-
-  /* --- Dropdown --- */
-  .dropdown { position: relative; display: inline-block; }
-  .dropbtn { cursor: pointer; }
-  .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #fff;
-    min-width: 220px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-radius: 8px;
-    padding: 0.5rem 0;
-    top: 100%;
-    left: 0;
-    z-index: 9999;
-    opacity: 0;
-    transform: translateY(5px);
-    transition: opacity 0.2s ease, transform 0.2s ease;
-  }
-  .dropdown-content a {
-    color: #222;
-    padding: 0.6rem 1rem;
-    display: block;
-    text-decoration: none;
-    transition: background 0.2s;
-  }
-  .dropdown-content a:hover { background: #f5f5f5; }
-  .dropdown:hover .dropdown-content {
-    display: block;
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  /* --- Innhold --- */
-  main {
-    max-width: 880px;
-    margin: 0 auto;
-    padding: 4rem 1.5rem 5rem;
-  }
-  h1 { font-size:2rem; margin-bottom:0.5rem; }
-  h2 { margin-top:3rem; font-size:1.3rem; color:#7c1125; }
-  p { margin-top:1rem; }
-  ul { margin:1rem 0 1rem 1.5rem; }
-  li { margin-bottom:.4rem; }
-
-  footer {
-    text-align: center;
-    padding: 2rem 0;
-    border-top: 1px solid rgba(0,0,0,0.05);
-  }
-  footer a {
-    text-decoration: none;
-    color: #7c1125;
-    font-weight: 500;
-  }
-
-  .highlight {
-    background: #f9f5f6;
-    border-left: 4px solid #7c1125;
-    padding: .8rem 1rem;
-    border-radius: 4px;
-    font-size: .95rem;
-  }
-</style>
+    /* --- Sideinnhold (lett typografi, ikke overstyr header) --- */
+    main {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem 5rem;
+      line-height: 1.6;
+      color: #222;
+    }
+    h1 { font-size: 2rem; margin-bottom: .5rem; }
+    h2 { margin-top: 3rem; font-size: 1.3rem; color: #7c1125; }
+    p { margin-top: 1rem; }
+    ul { margin: 1rem 0 1rem 1.5rem; }
+    li { margin-bottom: .4rem; }
+    .highlight {
+      background: #f9f5f6;
+      border-left: 4px solid #7c1125;
+      padding: .8rem 1rem;
+      border-radius: 4px;
+      font-size: .95rem;
+    }
+    footer {
+      text-align: center;
+      padding: 2rem 0;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    footer a { text-decoration: none; color: #7c1125; font-weight: 500; }
+  </style>
 </head>
 <body>
 
 <header class="site-header">
-  <div class="header-inner">
+  <div class="container header-inner">
     <a href="/" class="brand">
-      <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;vertical-align:middle;">
+      <img src="/assets/telvo-logo.png" alt="Telvo logo">
       <span class="brand-name">TELVO</span>
     </a>
-
     <nav class="nav" id="nav">
       <a href="/#om">Om</a>
 
+      <!-- Dynamisk dropdown for moduler (identisk mekanikk som forsiden) -->
       <div class="dropdown" id="modulesDropdown">
         <a href="/moduler/" class="dropbtn">Moduler ▾</a>
         <div class="dropdown-content" id="modulesList">
@@ -143,11 +84,10 @@
       </div>
 
       <a href="/#hvorfor">Hvorfor Telvo</a>
-      <a class="btn" href="/#kontakt">Kontakt</a>
+      <a class="cta" href="/#kontakt">Kontakt</a>
     </nav>
   </div>
 </header>
-
 
 <main>
   <h1>Telvo SystemAdmin</h1>
@@ -196,7 +136,7 @@
 </footer>
 
 <script>
-/* --- Dynamisk modul-dropdown --- */
+/* --- Dynamisk modul-dropdown (samme som forsiden) --- */
 (async () => {
   const dropdown = document.getElementById('modulesList');
   if (!dropdown) return;
@@ -225,7 +165,14 @@
     dropdown.innerHTML = '<a href="/moduler/plan/">Plan</a>';
   }
 })();
-</script>
 
+/* --- Mobilvennlig dropdown (klikk for å toggle, som forsiden) --- */
+document.addEventListener("click", e => {
+  const dropdownWrap = document.getElementById("modulesDropdown");
+  if (!dropdownWrap) return;
+  if (dropdownWrap.contains(e.target)) dropdownWrap.classList.toggle("active");
+  else dropdownWrap.classList.remove("active");
+});
+</script>
 </body>
 </html>
