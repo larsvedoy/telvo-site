@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Telvo – Planmodul</title>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    background: #fff;
+    color: #222;
+    line-height: 1.6;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+  }
+
+  header .brand-name {
+    font-weight: 600;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+  }
+
+  nav a {
+    color: #222;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: opacity .2s;
+  }
+  nav a:hover { opacity: .7; }
+  nav .cta {
+    background: #7c1125;
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 6px;
+  }
+
+  main { max-width: 960px; margin: 3rem auto; padding: 0 1rem; }
+  section { margin-bottom: 3rem; }
+  h1, h2, h3 { font-weight: 600; color: #111; }
+  h1 { font-size: 2rem; margin-bottom: 1rem; }
+  h2 { font-size: 1.5rem; margin-top: 2rem; margin-bottom: .5rem; }
+  h3 { font-size: 1.2rem; margin-top: 1.5rem; margin-bottom: .3rem; }
+
+  ul { padding-left: 1.2rem; }
+  li { margin-bottom: .5rem; }
+
+  .highlight {
+    background: #f9f9f9;
+    border-left: 4px solid #7c1125;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 6px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+    color: #555;
+  }
+  footer a {
+    color: #7c1125;
+    text-decoration: none;
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <a href="/" style="text-decoration:none; color:#222; display:flex; align-items:center;">
+      <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;">
+      <span class="brand-name">TELVO</span>
+    </a>
+  </div>
+  <nav>
+    <a href="/#om">Om</a>
+    <a href="/moduler/">Moduler</a>
+    <a href="/#hvorfor">Hvorfor Telvo</a>
+    <a class="cta" href="/#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Telvo Planmodul</h1>
+  <p><strong>En ny måte å utarbeide og dele kommunale planer på – databasert, integrert og involverende.</strong></p>
+  <p>Telvo Planmodul hjelper kommuner med å utvikle, forvalte og publisere kommuneplaner og temaplaner direkte i Microsoft Teams. 
+  Løsningen bygger på Microsoft Power Platform og gjør planarbeidet databasert – ikke dokumentbasert.</p>
+
+  <section>
+    <h2>Arkitektur og hovedidé</h2>
+    <p><strong>Bygget på Microsoft Power Platform</strong></p>
+    <ul>
+      <li><strong>Power Apps (i Teams):</strong> planverktøyet der ansatte skriver og samarbeider direkte i Teams.</li>
+      <li><strong>Dataverse:</strong> lagrer planinnhold som strukturerte data med koblinger mellom mål, strategier og tiltak.</li>
+      <li><strong>Power Pages:</strong> publiserer planene som universelt utformede nettrapporter for innbyggerne.</li>
+      <li><strong>Power Automate:</strong> håndterer arbeidsflyt og varslinger under planprosessen.</li>
+      <li><strong>Integrasjoner:</strong> åpne koblinger til GIS/planregister, økonomisystem, Power BI og Outlook-kalender.</li>
+    </ul>
+    <div class="highlight">
+      100 % skybasert (Microsoft 365 / Azure AD)  •  Universell utforming (WCAG 2.1)  •  Personvern og sikkerhet by design
+    </div>
+  </section>
+
+  <section>
+    <h2>Roller og medvirkning</h2>
+    <p><strong>Planlegging som involverer alle</strong></p>
+    <ul>
+      <li><strong>Planleggere og ansatte:</strong> samskriving, maler og struktur, versjonshistorikk og “rød tråd” til økonomipl
