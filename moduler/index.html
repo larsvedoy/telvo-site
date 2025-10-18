@@ -17,8 +17,8 @@
   header {
     position: sticky;
     top: 0;
-    z-index: 10;
-    background: rgba(255,255,255,0.85);
+    z-index: 100;
+    background: rgba(255,255,255,0.9);
     backdrop-filter: blur(6px);
     display: flex;
     justify-content: space-between;
@@ -26,14 +26,40 @@
     padding: 1rem 2rem;
     border-bottom: 1px solid rgba(0,0,0,0.05);
   }
-  header .logo {font-weight:600;letter-spacing:.5px;font-size:1.2rem;color:#222;text-decoration:none;}
-  nav a{color:#222;text-decoration:none;margin-left:1.5rem;font-weight:500;transition:opacity .2s;}
-  nav a:hover{opacity:.7;}
-  nav .btn{background:#7c1125;color:#fff;padding:.5rem 1rem;border-radius:6px;margin-left:1.5rem;}
+  header .brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #222;
+    text-decoration: none;
+  }
+  header .brand-name {letter-spacing:.5px;}
+  nav a {
+    color: #222;
+    text-decoration: none;
+    margin-left: 1.5rem;
+    font-weight: 500;
+    transition: opacity .2s;
+  }
+  nav a:hover { opacity: .7; }
+  nav .cta {
+    background: #7c1125;
+    color: #fff;
+    padding: .5rem 1rem;
+    border-radius: 6px;
+    margin-left: 1.5rem;
+  }
 
   /* --- Dropdown --- */
-  .dropdown { position: relative; display: inline-block; }
-  .dropbtn { cursor: pointer; padding: 0; }
+  .dropdown {
+    position: relative;
+    display: inline-block;
+  }
+  .dropbtn {
+    cursor: pointer;
+  }
   .dropdown-content {
     display: none;
     position: absolute;
@@ -42,22 +68,30 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     border-radius: 8px;
     padding: 0.5rem 0;
-    top: 100%; left: 0;
-    z-index: 1000;
-    opacity: 0; transform: translateY(5px);
+    top: 100%;
+    left: 0;
+    z-index: 9999;
+    opacity: 0;
+    transform: translateY(5px);
     transition: opacity 0.2s ease, transform 0.2s ease;
   }
   .dropdown-content a {
-    color: #222; padding: 0.6rem 1rem;
-    display: block; text-decoration: none;
+    color: #222;
+    padding: 0.6rem 1rem;
+    display: block;
+    text-decoration: none;
     transition: background 0.2s;
   }
-  .dropdown-content a:hover { background: #f5f5f5; }
-  .dropdown:hover .dropdown-content,
-  .dropdown.active .dropdown-content {
-    display: block; opacity: 1; transform: translateY(0);
+  .dropdown-content a:hover {
+    background: #f5f5f5;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
   }
 
+  /* --- Main and Footer --- */
   main {
     height: calc(100vh - 80px);
     display: flex;
@@ -80,35 +114,44 @@
     color: #7c1125;
     font-weight: 500;
   }
+
+  /* --- Touch support (åpner dropdown ved trykk) --- */
+  @media (hover: none) {
+    .dropdown-content {
+      display: none;
+    }
+    .dropdown:focus-within .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="/" class="brand">
-      <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;vertical-align:middle;">
-      <span class="brand-name">TELVO</span>
-    </a>
-    <nav class="nav" id="nav">
-      <a href="/#om">Om</a>
+<header>
+  <a href="/" class="brand">
+    <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;">
+    <span class="brand-name">TELVO</span>
+  </a>
+  <nav>
+    <a href="/#om">Om</a>
 
-      <!-- Dynamisk modul-meny -->
-      <div class="dropdown" id="modulesDropdown">
-        <a href="/moduler/" class="dropbtn">Moduler ▾</a>
-        <div class="dropdown-content" id="modulesList">
-          <span style="display:block;padding:0.6rem 1rem;color:#777;">Laster moduler…</span>
-        </div>
+    <!-- Dynamisk modul-meny -->
+    <div class="dropdown" id="modulesDropdown">
+      <a href="/moduler/" class="dropbtn">Moduler ▾</a>
+      <div class="dropdown-content" id="modulesList">
+        <span style="display:block;padding:0.6rem 1rem;color:#777;">Laster moduler…</span>
       </div>
+    </div>
 
-      <a href="/#hvorfor">Hvorfor Telvo</a>
-      <a class="cta" href="/#kontakt">Kontakt</a>
-    </nav>
-  </div>
+    <a href="/#hvorfor">Hvorfor Telvo</a>
+    <a class="cta" href="/#kontakt">Kontakt</a>
+  </nav>
 </header>
 
 <main>
-  <!-- Embed av Draw.io-visning -->
   <iframe
     src="https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Telvo.drawio&dark=auto#Uhttps%3A%2F%2Fdrive.google.com%2Fuc%3Fid%3D1JHXo53BL1EqIK1838iRocbslcQpWjJi5%26export%3Ddownload"
     allowfullscreen
@@ -149,14 +192,7 @@
     dropdown.innerHTML = '<a href="/moduler/plan/">Plan</a>';
   }
 })();
-
-/* --- Mobilvennlig dropdown --- */
-document.addEventListener("click", e => {
-  const dropdown = document.getElementById("modulesDropdown");
-  if (!dropdown) return;
-  if (dropdown.contains(e.target)) dropdown.classList.toggle("active");
-  else dropdown.classList.remove("active");
-});
 </script>
 </body>
 </html>
+
