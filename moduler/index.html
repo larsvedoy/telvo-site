@@ -13,6 +13,7 @@
     background: #fff;
   }
 
+  /* --- Header --- */
   header {
     position: sticky;
     top: 0;
@@ -30,10 +31,38 @@
   nav a:hover{opacity:.7;}
   nav .btn{background:#7c1125;color:#fff;padding:.5rem 1rem;border-radius:6px;margin-left:1.5rem;}
 
+  /* --- Dropdown --- */
+  .dropdown { position: relative; display: inline-block; }
+  .dropbtn { cursor: pointer; padding: 0; }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    min-width: 220px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    top: 100%; left: 0;
+    z-index: 1000;
+    opacity: 0; transform: translateY(5px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+  .dropdown-content a {
+    color: #222; padding: 0.6rem 1rem;
+    display: block; text-decoration: none;
+    transition: background 0.2s;
+  }
+  .dropdown-content a:hover { background: #f5f5f5; }
+  .dropdown:hover .dropdown-content,
+  .dropdown.active .dropdown-content {
+    display: block; opacity: 1; transform: translateY(0);
+  }
+
   main{height:calc(100vh - 80px);overflow:hidden;display:flex;flex-direction:column;}
   #stage{flex:1;overflow:auto;background:#fff;}
   svg{display:block;margin:0 auto;max-width:1600px;height:auto;}
 
+  /* --- Zoom toolbar --- */
   .zoom-toolbar{
     position:fixed;bottom:1.5rem;right:1.5rem;
     display:flex;flex-direction:column;gap:.5rem;
@@ -59,21 +88,20 @@
 
 <header class="site-header">
   <div class="container header-inner">
-    <a href="#top" class="brand">
+    <a href="/" class="brand">
       <img src="/assets/telvo-logo.png" alt="Telvo logo" style="height:32px;vertical-align:middle;">
       <span class="brand-name">TELVO</span>
     </a>
     <nav class="nav" id="nav">
       <a href="/#om">Om</a>
-      <div class="dropdown">
-  <a href="/moduler/" class="dropbtn">Moduler ▾</a>
-  <div class="dropdown-content">
-    <a href="/moduler/plan/">Planmodul</a>
-    <a href="/moduler/budsjett/">Budsjett & scenarier</a>
-    <a href="/moduler/passiva/">Passiva / lån</a>
-    <a href="/moduler/selvkost/">Selvkost & delegasjoner</a>
-  </div>
-</div>
+
+      <!-- Dynamisk modul-meny -->
+      <div class="dropdown" id="modulesDropdown">
+        <a href="/moduler/" class="dropbtn">Moduler ▾</a>
+        <div class="dropdown-content" id="modulesList">
+          <span style="display:block;padding:0.6rem 1rem;color:#777;">Laster moduler…</span>
+        </div>
+      </div>
 
       <a href="/#hvorfor">Hvorfor Telvo</a>
       <a class="cta" href="/#kontakt">Kontakt</a>
@@ -92,8 +120,46 @@
 <footer><a href="/">← Tilbake til forsiden</a></footer>
 
 <script>
-const base = window.location.pathname.includes('/moduler/') ? '../' : './';
-const svgUrl = base + 'assets/Telvo-Page-1.drawio.svg';
+/* --- Dynamisk modul-dropdown --- */
+(async () => {
+  const dropdown = document.getElementById('modulesList');
+  if (!dropdown) return;
+
+  try {
+    const res = await fetch("https://api.github.com/repos/larsvedoy/telvo-site/contents/moduler");
+    if (!res.ok) throw new Error('GitHub-svar ' + res.status);
+    const data = await res.json();
+
+    dropdown.innerHTML = "";
+    data.forEach(item => {
+      if (item.type === "dir") {
+        const a = document.createElement("a");
+        const cleanName = item.name.charAt(0).toUpperCase() + item.name.slice(1);
+        a.textContent = cleanName;
+        a.href = "/moduler/" + item.name + "/";
+        dropdown.appendChild(a);
+      }
+    });
+
+    if (!dropdown.innerHTML.trim()) {
+      dropdown.innerHTML = '<span style="display:block;padding:0.6rem 1rem;color:#777;">Ingen moduler funnet</span>';
+    }
+  } catch (err) {
+    console.warn("Kunne ikke hente moduler fra GitHub:", err);
+    dropdown.innerHTML = '<a href="/moduler/plan/">Plan</a>';
+  }
+})();
+
+/* --- Mobilvennlig dropdown --- */
+document.addEventListener("click", e => {
+  const dropdown = document.getElementById("modulesDropdown");
+  if (!dropdown) return;
+  if (dropdown.contains(e.target)) dropdown.classList.toggle("active");
+  else dropdown.classList.remove("active");
+});
+
+/* --- SVG-visualisering med klikk og zoom --- */
+const svgUrl = '/assets/Telvo-Page-1.drawio.svg';
 const EXCLUDED = new Set(["ERP", "Personalsystem"]);
 
 async function loadSVG(){
@@ -104,10 +170,8 @@ async function loadSVG(){
   const svg = stage.querySelector('svg');
   if(!svg) return;
 
-  // slå av pointer-events på alt eksisterende i SVG
   svg.querySelectorAll('*').forEach(el => el.setAttribute('pointer-events','none'));
 
-  // nytt lag for klikk og tooltips
   const overlayLayer = document.createElementNS('http://www.w3.org/2000/svg','g');
   overlayLayer.setAttribute('id','overlayLayer');
   overlayLayer.setAttribute('pointer-events','all');
@@ -142,11 +206,10 @@ async function loadSVG(){
     if(clickable){
       rect.addEventListener('click',()=>{window.location.href='/moduler/'+slugify(label);});
     }
-
     overlayLayer.appendChild(rect);
   });
 
-  // zoom
+  // --- Zoom-funksjoner ---
   let viewBox;
   function getViewBox(){
     const vb=svg.getAttribute('viewBox');
@@ -160,4 +223,35 @@ async function loadSVG(){
   function setViewBox(vb){viewBox=vb;svg.setAttribute('viewBox',vb.join(' '));}
 
   function zoom(factor,cx=null,cy=null){
-    const [x,y,w,h]=vi
+    const [x,y,w,h]=viewBox;
+    const centerX=cx??(x+w/2);
+    const centerY=cy??(y+h/2);
+    const newW=w*factor;
+    const newH=h*factor;
+    const newX=centerX-newW/2;
+    const newY=centerY-newH/2;
+    setViewBox([newX,newY,newW,newH]);
+  }
+
+  document.getElementById('zoomIn').addEventListener('click',()=>zoom(0.85));
+  document.getElementById('zoomOut').addEventListener('click',()=>zoom(1.15));
+  document.getElementById('zoomReset').addEventListener('click',()=>{
+    const bb=svg.getBBox();
+    setViewBox([bb.x,bb.y,Math.max(800,bb.width),Math.max(600,bb.height)]);
+  });
+
+  svg.addEventListener('wheel',e=>{
+    e.preventDefault();
+    const scale=e.deltaY<0?0.9:1.1;
+    const pt=svg.createSVGPoint();
+    pt.x=e.clientX;pt.y=e.clientY;
+    const ctm=svg.getScreenCTM().inverse();
+    const p=pt.matrixTransform(ctm);
+    zoom(scale,p.x,p.y);
+  },{passive:false});
+}
+
+loadSVG();
+</script>
+</body>
+</html>
